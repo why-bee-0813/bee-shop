@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>商品页 · 小蜜蜂的神秘商店</title>
+  <style>
+    :root {
+      --ink: #2f2528;
+      --muted: #7b686e;
+      --line: #f2d9df;
+      --paper: #ffffff;
+      --soft: #fff7df;
+      --pink: #f7a9bd;
+      --pink-strong: #e75f8b;
+      --yellow: #ffd45c;
+      --white: #ffffff;
+      --max: 1120px;
+      --side: clamp(18px, 4vw, 40px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(247, 169, 189, 0.24), transparent 30rem),
+        radial-gradient(circle at 88% 4%, rgba(255, 212, 92, 0.22), transparent 28rem),
+        linear-gradient(180deg, #fff8fb 0%, #ffffff 42%, #fff9e8 100%);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page,
+    footer {
+      width: min(var(--max), calc(100% - var(--side) * 2));
+      margin-inline: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: clamp(18px, 3vw, 26px) 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(247, 169, 189, 0.5);
+      border-radius: 50%;
+      background: var(--white);
+      color: #c94f78;
+      font-size: 20px;
+      box-shadow: 0 12px 30px rgba(247, 169, 189, 0.16);
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex: 0 0 auto;
+      gap: clamp(14px, 3vw, 24px);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: end;
+      padding: clamp(36px, 7vw, 70px) 0 clamp(28px, 5vw, 44px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: #c94f78;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 620px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 18px);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid #f0a8b9;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--pink-strong);
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      box-shadow: 0 16px 32px rgba(231, 95, 139, 0.18);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(247, 169, 189, 0.18);
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      padding: 18px 0 clamp(48px, 8vw, 72px);
+    }
+
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 0 18px;
+    }
+
+    .category-tab {
+      appearance: none;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid rgba(247, 169, 189, 0.42);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: #c94f78;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .category-tab.is-active {
+      background: var(--pink-strong);
+      color: var(--white);
+      box-shadow: 0 14px 28px rgba(231, 95, 139, 0.18);
+    }
+
+    .category-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      padding: 10px 0 18px;
+    }
+
+    .category-head h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .category-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .product {
+      appearance: none;
+      display: block;
+      width: 100%;
+      min-height: 100%;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .product:hover,
+    .product:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(247, 169, 189, 0.14);
+    }
+
+    .product:focus-visible {
+      outline: 3px solid rgba(231, 95, 139, 0.28);
+      outline-offset: 3px;
+    }
+
+    .product-visual {
+      height: clamp(190px, 23vw, 240px);
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(247, 169, 189, 0.18), rgba(255, 212, 92, 0.18)),
+        var(--soft);
+    }
+
+    .product-shape {
+      width: 106px;
+      height: 136px;
+      border-radius: 24px 24px 32px 32px;
+      background: linear-gradient(180deg, #ffe78f, #ffd45c);
+      box-shadow: inset 12px 0 24px rgba(255, 255, 255, 0.38), 0 18px 30px rgba(255, 212, 92, 0.22);
+    }
+
+    .product[data-shape="round"] .product-shape {
+      width: 136px;
+      height: 104px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #fff0b8, #f7a9bd);
+    }
+
+    .product[data-shape="box"] .product-shape {
+      width: 124px;
+      height: 124px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #ffffff, #ffd45c);
+    }
+
+    .product[data-shape="pouch"] .product-shape {
+      width: 112px;
+      height: 130px;
+      border-radius: 46px 46px 26px 26px;
+      background: linear-gradient(145deg, #fff1f5, #ffd45c);
+    }
+
+    .product-body {
+      padding: clamp(18px, 3vw, 24px);
+    }
+
+    .product-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .price {
+      color: #c94f78;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      padding: 5px 10px;
+      border: 1px solid rgba(247, 169, 189, 0.34);
+      border-radius: 999px;
+      color: #c94f78;
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .product-action {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 18px;
+      color: #c94f78;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .order-strip {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: clamp(44px, 7vw, 68px);
+      padding: clamp(24px, 5vw, 34px);
+      border: 1px solid rgba(247, 169, 189, 0.34);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #fff1f5 0%, #ffffff 54%, #fff7df 100%);
+      box-shadow: 0 24px 58px rgba(247, 169, 189, 0.16);
+    }
+
+    .order-strip h2 {
+      margin: 0;
+      font-size: clamp(24px, 3.6vw, 36px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .order-strip p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 0 0 46px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: var(--side);
+      background: rgba(47, 37, 40, 0.22);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal.is-open {
+      display: grid;
+    }
+
+    .modal-card {
+      width: min(560px, 100%);
+      max-height: min(760px, calc(100vh - var(--side) * 2));
+      overflow: auto;
+      border: 1px solid rgba(247, 169, 189, 0.38);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 28px 70px rgba(47, 37, 40, 0.18);
+    }
+
+    .modal-visual {
+      height: 220px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(247, 169, 189, 0.2), rgba(255, 212, 92, 0.18)),
+        var(--soft);
+    }
+
+    .modal-body {
+      padding: clamp(22px, 5vw, 32px);
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .modal-close {
+      appearance: none;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(247, 169, 189, 0.42);
+      border-radius: 50%;
+      background: var(--white);
+      color: #c94f78;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 10px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .detail-list li {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff8fb;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .order-strip,
+      .category-head {
+        display: block;
+      }
+
+      .hero .button,
+      .order-strip .button {
+        margin-top: 22px;
+      }
+
+      .category-head p {
+        margin-top: 10px;
+      }
+
+      .catalog {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .product:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --side: 14px;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid rgba(247, 169, 189, 0.24);
+      }
+
+      .catalog {
+        grid-template-columns: 1fr;
+      }
+
+      .product:last-child {
+        grid-column: auto;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .modal-actions .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">蜂</span>
+        <span>小蜜蜂的神秘商店</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#about">介绍</a>
+        <a href="products.html">商品</a>
+        <a href="#order">下单</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Mystery Catalog</span>
+        <h1>本期商品</h1>
+        <p class="intro">先按零食区和正餐区整理商品，后续可直接替换名称、价格、图片和详情。</p>
+      </div>
+      <a class="button" href="#order">咨询下单</a>
+    </section>
+
+    <div class="category-tabs" id="categoryTabs" aria-label="商品分类"></div>
+    <section class="category-head" aria-live="polite">
+      <div>
+        <h2 id="categoryTitle"></h2>
+        <p id="categoryDescription"></p>
+      </div>
+      <span class="price" id="categoryCount"></span>
+    </section>
+    <section class="catalog" id="catalog" aria-label="商品列表"></section>
+
+    <section class="order-strip" id="order">
+      <div>
+        <h2>想要预订或咨询库存？</h2>
+        <p>点击下单链接填写信息，店主会按提交顺序确认商品、价格和发货安排。</p>
+      </div>
+      <a class="button" href="checkout.html">打开下单链接</a>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 小蜜蜂的神秘商店 · 让喜欢有回应 · 让心愿有着落
+  </footer>
+
+  <div class="modal" id="productModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-visual">
+        <div class="product-shape" id="modalShape" aria-hidden="true"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-head">
+          <div>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <span class="price" id="modalPrice"></span>
+          </div>
+          <button class="modal-close" type="button" aria-label="关闭详情">×</button>
+        </div>
+        <p id="modalDescription"></p>
+        <div class="tag-row" id="modalTags"></div>
+        <ul class="detail-list" id="modalDetails"></ul>
+        <div class="modal-actions">
+          <a class="button" id="modalOrderLink" href="checkout.html">咨询这个商品</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const shapeTypes = ["jar", "round", "box", "pouch"];
+
+    function createPlaceholderProducts(categoryName, count) {
+      return Array.from({ length: count }, (_, index) => {
+        const number = String(index + 1).padStart(2, "0");
+        return {
+          name: `${categoryName}商品 ${number}`,
+          price: "待定",
+          summary: "商品名称、价格、规格和介绍待补充，当前先作为分类占位展示。",
+          tags: [categoryName, "待补充"],
+          details: [
+            "名称：待补充",
+            "规格：待补充",
+            "库存：待确认",
+            "备注：后续可替换为真实商品信息"
+          ],
+          shape: shapeTypes[index % shapeTypes.length]
+        };
+      });
+    }
+
+    const categories = [
+      {
+        name: "零食区",
+        description: "适合随手投喂、下午茶和小惊喜的商品分类。",
+        products: createPlaceholderProducts("零食区", 20)
+      },
+      {
+        name: "正餐区",
+        description: "适合认真吃饭、饱腹搭配和日常正餐选择的商品分类。",
+        products: createPlaceholderProducts("正餐区", 20)
+      }
+    ];
+
+    let activeCategoryIndex = 0;
+
+    const categoryTabs = document.querySelector("#categoryTabs");
+    const categoryTitle = document.querySelector("#categoryTitle");
+    const categoryDescription = document.querySelector("#categoryDescription");
+    const categoryCount = document.querySelector("#categoryCount");
+    const catalog = document.querySelector("#catalog");
+    const modal = document.querySelector("#productModal");
+    const modalTitle = document.querySelector("#modalTitle");
+    const modalPrice = document.querySelector("#modalPrice");
+    const modalDescription = document.querySelector("#modalDescription");
+    const modalTags = document.querySelector("#modalTags");
+    const modalDetails = document.querySelector("#modalDetails");
+    const modalOrderLink = document.querySelector("#modalOrderLink");
+    const closeButton = document.querySelector(".modal-close");
+
+    function renderCategoryTabs() {
+      categoryTabs.innerHTML = categories.map((category, index) => `
+        <button
+          class="category-tab ${index === activeCategoryIndex ? "is-active" : ""}"
+          type="button"
+          data-category="${index}"
+          aria-pressed="${index === activeCategoryIndex ? "true" : "false"}"
+        >
+          ${category.name}
+        </button>
+      `).join("");
+    }
+
+    function renderProducts() {
+      const category = categories[activeCategoryIndex];
+      categoryTitle.textContent = category.name;
+      categoryDescription.textContent = category.description;
+      categoryCount.textContent = `${category.products.length} 件商品`;
+      catalog.innerHTML = category.products.map((product, index) => `
+        <button class="product" type="button" data-index="${index}" data-shape="${product.shape}" aria-label="查看${product.name}详情">
+          <div class="product-visual">
+            <div class="product-shape" aria-hidden="true"></div>
+          </div>
+          <div class="product-body">
+            <div class="product-top">
+              <h3>${product.name}</h3>
+              <span class="price">${product.price}</span>
+            </div>
+            <p>${product.summary}</p>
+            <div class="tag-row">
+              ${product.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+            <span class="product-action">查看详情</span>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function openModal(product) {
+      modalTitle.textContent = product.name;
+      modalPrice.textContent = product.price;
+      modalDescription.textContent = product.summary;
+      modalTags.innerHTML = product.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+      modalDetails.innerHTML = product.details.map((detail) => `<li>${detail}</li>`).join("");
+      modalOrderLink.href = `checkout.html?product=${encodeURIComponent(product.name)}`;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      closeButton.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    catalog.addEventListener("click", (event) => {
+      const productCard = event.target.closest(".product");
+      if (!productCard) return;
+      openModal(categories[activeCategoryIndex].products[Number(productCard.dataset.index)]);
+    });
+
+    categoryTabs.addEventListener("click", (event) => {
+      const tab = event.target.closest(".category-tab");
+      if (!tab) return;
+      activeCategoryIndex = Number(tab.dataset.category);
+      renderCategoryTabs();
+      renderProducts();
+    });
+
+    closeButton.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    renderCategoryTabs();
+    renderProducts();
+  </script>
+</body>
+</html>
