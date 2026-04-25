@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小蜜蜂私人店铺</title>
+  <style>
+    :root {
+      --ink: #171717;
+      --muted: #66615b;
+      --line: #e8e1d7;
+      --paper: #fffdf8;
+      --soft: #f7f0e6;
+      --gold: #d6a63c;
+      --gold-dark: #9c6f19;
+      --leaf: #637c55;
+      --white: #ffffff;
+      --max: 1120px;
+      --side: clamp(18px, 4vw, 40px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(214, 166, 60, 0.18), transparent 32rem),
+        linear-gradient(180deg, #fffaf1 0%, #ffffff 43%, #f8f5ef 100%);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+    }
+
+    .page {
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .nav,
+    .hero,
+    .section,
+    footer {
+      width: min(var(--max), calc(100% - var(--side) * 2));
+      margin-inline: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: clamp(18px, 3vw, 26px) 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(156, 111, 25, 0.22);
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--gold-dark);
+      font-size: 20px;
+      box-shadow: 0 12px 30px rgba(53, 38, 12, 0.08);
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex: 0 0 auto;
+      gap: clamp(14px, 3vw, 24px);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: clamp(30px, 6vw, 56px);
+      align-items: center;
+      margin-top: clamp(16px, 4vw, 38px);
+      padding-bottom: clamp(42px, 8vw, 72px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: var(--gold-dark);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(40px, 8vw, 84px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 610px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 18px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button.primary {
+      color: var(--white);
+      background: var(--ink);
+      box-shadow: 0 16px 32px rgba(23, 23, 23, 0.18);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--ink);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(23, 23, 23, 0.14);
+    }
+
+    .showcase {
+      position: relative;
+      min-height: clamp(340px, 40vw, 430px);
+      border: 1px solid rgba(156, 111, 25, 0.18);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 240, 230, 0.8)),
+        repeating-linear-gradient(120deg, transparent 0 26px, rgba(214, 166, 60, 0.09) 26px 27px);
+      box-shadow: 0 28px 70px rgba(66, 45, 16, 0.12);
+    }
+
+    .honey-jar {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      width: clamp(156px, 20vw, 210px);
+      height: clamp(216px, 27vw, 280px);
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(156, 111, 25, 0.28);
+      border-radius: 34px 34px 42px 42px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.08) 38%),
+        linear-gradient(180deg, #f7c64f 0%, #c68116 100%);
+      box-shadow: inset 24px 0 38px rgba(255, 255, 255, 0.24), 0 28px 54px rgba(149, 94, 12, 0.2);
+    }
+
+    .honey-jar::before {
+      content: "";
+      position: absolute;
+      left: 23%;
+      right: 23%;
+      top: -28px;
+      height: 44px;
+      border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(180deg, #2b251d, #15120f);
+      box-shadow: 0 10px 18px rgba(23, 23, 23, 0.16);
+    }
+
+    .honey-jar::after {
+      content: "BEE";
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      top: 38%;
+      padding: 20px 0;
+      border: 1px solid rgba(156, 111, 25, 0.25);
+      border-radius: 50%;
+      background: rgba(255, 253, 248, 0.76);
+      color: var(--gold-dark);
+      text-align: center;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .note {
+      position: absolute;
+      left: clamp(18px, 4vw, 24px);
+      right: clamp(18px, 4vw, 24px);
+      bottom: clamp(18px, 4vw, 24px);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(156, 111, 25, 0.16);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      padding: clamp(44px, 8vw, 64px) 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 4.4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 440px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product {
+      min-height: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(40, 31, 17, 0.1);
+    }
+
+    .product-visual {
+      height: clamp(170px, 22vw, 210px);
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(214, 166, 60, 0.14), rgba(99, 124, 85, 0.1)),
+        var(--soft);
+    }
+
+    .product-shape {
+      width: 96px;
+      height: 126px;
+      border-radius: 24px 24px 32px 32px;
+      background: linear-gradient(180deg, #ffe28b, #c88719);
+      box-shadow: inset 12px 0 24px rgba(255, 255, 255, 0.34), 0 18px 30px rgba(156, 111, 25, 0.16);
+    }
+
+    .product:nth-child(2) .product-shape {
+      width: 128px;
+      height: 98px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #f2dd9c, #b87526);
+    }
+
+    .product:nth-child(3) .product-shape {
+      width: 118px;
+      height: 118px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #d5dfc7, #6f875d);
+    }
+
+    .product-body {
+      padding: clamp(18px, 3vw, 22px);
+    }
+
+    .product-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .price {
+      color: var(--gold-dark);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      padding: 5px 10px;
+      border: 1px solid rgba(99, 124, 85, 0.25);
+      border-radius: 999px;
+      color: var(--leaf);
+      background: rgba(255, 255, 255, 0.54);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .order {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+      margin-top: 10px;
+      padding: clamp(24px, 5vw, 34px);
+      border: 1px solid rgba(23, 23, 23, 0.12);
+      border-radius: 8px;
+      background: #191815;
+      color: var(--white);
+      box-shadow: 0 24px 58px rgba(23, 23, 23, 0.16);
+    }
+
+    .order p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .order .button {
+      border-color: rgba(255, 255, 255, 0.48);
+      color: var(--ink);
+      background: var(--white);
+    }
+
+    footer {
+      padding: 34px 0 46px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero > div:first-child {
+        max-width: 720px;
+      }
+
+      .showcase {
+        width: min(100%, 680px);
+      }
+
+      .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .product:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid rgba(156, 111, 25, 0.16);
+      }
+
+      .section-head,
+      .order {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 14px;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+      }
+
+      .product:last-child {
+        grid-column: auto;
+      }
+
+      .order .button {
+        width: 100%;
+        margin-top: 22px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      :root {
+        --side: 14px;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+      }
+
+      .nav-links {
+        gap: 10px;
+        font-size: 13px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 12vw, 56px);
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .showcase {
+        min-height: 320px;
+      }
+
+      .note {
+        display: block;
+      }
+
+      .note span {
+        display: block;
+      }
+
+      .note span + span {
+        margin-top: 4px;
+      }
+
+      .product-top {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true">蜂</span>
+        <span>小蜜蜂私人店铺</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">介绍</a>
+        <a href="#products">商品</a>
+        <a href="#order">下单</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="about">
+      <div>
+        <span class="eyebrow">Private Honey Shop</span>
+        <h1>小蜜蜂私人店铺</h1>
+        <p class="intro">
+          精选日常好物与蜂蜜灵感礼盒，强调质感、实用和少量上新。适合自用，也适合作为轻盈体面的心意。
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#products">查看商品</a>
+          <a class="button secondary" href="https://example.com/order" target="_blank" rel="noreferrer">立即下单</a>
+        </div>
+      </div>
+      <div class="showcase" aria-label="蜂蜜商品展示">
+        <div class="honey-jar" aria-hidden="true"></div>
+        <div class="note">
+          <span>少量现货 · 私人选品</span>
+          <span>48 小时内确认订单</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <div class="section-head">
+        <h2>本期商品</h2>
+        <p>商品以简洁包装、稳定品质和日常使用场景为核心，价格与库存可按实际经营随时调整。</p>
+      </div>
+
+      <div class="products">
+        <article class="product">
+          <div class="product-visual">
+            <div class="product-shape" aria-hidden="true"></div>
+          </div>
+          <div class="product-body">
+            <div class="product-top">
+              <h3>原蜜小罐</h3>
+              <span class="price">¥68</span>
+            </div>
+            <p>清甜柔和，适合早餐、茶饮和烘焙搭配。</p>
+            <div class="tag-row">
+              <span class="tag">天然风味</span>
+              <span class="tag">自用推荐</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="product-visual">
+            <div class="product-shape" aria-hidden="true"></div>
+          </div>
+          <div class="product-body">
+            <div class="product-top">
+              <h3>蜂蜡香氛</h3>
+              <span class="price">¥89</span>
+            </div>
+            <p>温暖淡香，适合卧室、书桌和睡前放松。</p>
+            <div class="tag-row">
+              <span class="tag">手作感</span>
+              <span class="tag">礼物优选</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="product-visual">
+            <div class="product-shape" aria-hidden="true"></div>
+          </div>
+          <div class="product-body">
+            <div class="product-top">
+              <h3>春日礼盒</h3>
+              <span class="price">¥168</span>
+            </div>
+            <p>组合装含蜂蜜、香氛与手写卡片，适合送礼。</p>
+            <div class="tag-row">
+              <span class="tag">限量</span>
+              <span class="tag">含包装</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="order">
+      <div class="order">
+        <div>
+          <h2>想要预订或咨询库存？</h2>
+          <p>点击下单链接填写信息，店主会按提交顺序确认商品、价格和发货安排。</p>
+        </div>
+        <a class="button" href="https://example.com/order" target="_blank" rel="noreferrer">打开下单链接</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 小蜜蜂私人店铺 · 私人选品 · 少量上新
+  </footer>
+</body>
+</html>
