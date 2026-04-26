@@ -431,8 +431,8 @@
     </div>
 
     <section class="success" id="success">
-      <h2>订单已提交</h2>
-      <p>你的订单信息已临时保存在本机浏览器中。正式上线后这里可以接入后台、微信通知或数据库。</p>
+      <h2>点单成功，我已经收到啦。</h2>
+      <p>我会按提交顺序查看点单内容，并尽快确认后续安排。</p>
       <span class="success-code" id="orderCode"></span>
     </section>
 
@@ -454,9 +454,13 @@
               <input id="quantity" name="quantity" type="number" min="1" value="1" required>
             </div>
             <div class="field">
-              <label for="budget">预算或心理价位</label>
-              <input id="budget" name="budget" type="text" placeholder="例如：100 元以内">
+              <label for="spec">规格</label>
+              <input id="spec" name="spec" type="text" placeholder="例如：奶茶 / 大杯 / 少冰 / 半糖">
             </div>
+          </div>
+          <div class="field">
+            <label for="budget">预算或心理价位</label>
+            <input id="budget" name="budget" type="text" placeholder="例如：100 元以内">
           </div>
         </section>
 
@@ -525,8 +529,9 @@
       <aside class="summary" aria-label="订单摘要">
         <h3>订单摘要</h3>
         <ul class="summary-list">
-          <li><span>分类</span><strong id="summaryCategory">零食区</strong></li>
-          <li><span>商品</span><strong id="summaryProduct">零食区商品 01</strong></li>
+          <li><span>分类</span><strong id="summaryCategory">休闲零食区</strong></li>
+          <li><span>商品</span><strong id="summaryProduct">麻辣王子辣条</strong></li>
+          <li><span>规格</span><strong id="summarySpec">未填写</strong></li>
           <li><span>数量</span><strong id="summaryQuantity">1</strong></li>
           <li><span>配送</span><strong id="summaryDelivery">快递配送</strong></li>
           <li><span>付款</span><strong id="summaryPayment">提交后联系付款</strong></li>
@@ -540,22 +545,96 @@
   </footer>
 
   <script>
+    const snackProductNames = [
+      "麻辣王子辣条",
+      "卫龙辣条",
+      "卫龙魔芋爽",
+      "卫龙亲嘴烧",
+      "缺牙齿",
+      "劲仔小鱼",
+      "鸡脚筋",
+      "火腿纯肉肠",
+      "玉米火腿肠",
+      "乐事薯片",
+      "旺仔小馒头",
+      "百醇",
+      "趣多多",
+      "好丽友派",
+      "奥利奥",
+      "板栗",
+      "巧克力",
+      "干脆面",
+      "可比克薯片",
+      "海苔片"
+    ];
+    const drinkBrandNames = [
+      "茶颜悦色",
+      "茶百道",
+      "喜茶",
+      "霸王茶姬",
+      "蜜雪冰城",
+      "茉酸奶",
+      "CoCo都可",
+      "古茗",
+      "沪上阿姨"
+    ];
+    const createDrinkProductNames = (brandName) => Array.from(
+      { length: 10 },
+      (_, index) => `${brandName}待定商品 ${String(index + 1).padStart(2, "0")}`
+    );
+    const mealCuisineNames = [
+      "汉堡薯条",
+      "西餐",
+      "火锅",
+      "烧烤",
+      "烤肉（烤鱼）",
+      "日式料理",
+      "韩式料理",
+      "家常菜",
+      "粤菜",
+      "东北菜",
+      "自助餐（烤肉自助、火锅自助）",
+      "特色菜"
+    ];
+    const createMealProductNames = (cuisineName) => Array.from(
+      { length: 5 },
+      (_, index) => `${cuisineName}待定商品 ${String(index + 1).padStart(2, "0")}`
+    );
+    const entertainmentGameGroups = [
+      {
+        section: "电脑游戏陪玩",
+        modules: ["无畏契约", "三角洲行动", "斗地主", "steam游戏"]
+      },
+      {
+        section: "手机游戏陪玩",
+        modules: ["洛克王国（hot！）", "王者荣耀", "心动小镇", "金铲铲之战", "三角洲行动（手游版）"]
+      }
+    ];
+    const createEntertainmentProductNames = (moduleName) => Array.from(
+      { length: 5 },
+      (_, index) => `${moduleName}待定商品 ${String(index + 1).padStart(2, "0")}`
+    );
+
     const categories = [
       {
-        name: "零食区",
-        products: Array.from({ length: 20 }, (_, index) => `零食区商品 ${String(index + 1).padStart(2, "0")}`)
+        name: "休闲零食区",
+        products: snackProductNames
       },
-      {
-        name: "正餐区",
-        products: Array.from({ length: 20 }, (_, index) => `正餐区商品 ${String(index + 1).padStart(2, "0")}`)
-      },
-      {
-        name: "娱乐区",
-        products: Array.from({ length: 20 }, (_, index) => `娱乐区商品 ${String(index + 1).padStart(2, "0")}`)
-      },
+      ...drinkBrandNames.map((brandName) => ({
+        name: `饮品区 / ${brandName}`,
+        products: createDrinkProductNames(brandName)
+      })),
+      ...mealCuisineNames.map((cuisineName) => ({
+        name: `正餐区 / ${cuisineName}`,
+        products: createMealProductNames(cuisineName)
+      })),
+      ...entertainmentGameGroups.flatMap((group) => group.modules.map((moduleName) => ({
+        name: `娱乐区 / ${group.section} / ${moduleName}`,
+        products: createEntertainmentProductNames(moduleName)
+      }))),
       {
         name: "学习区",
-        products: Array.from({ length: 20 }, (_, index) => `学习区商品 ${String(index + 1).padStart(2, "0")}`)
+        products: Array.from({ length: 20 }, (_, index) => `学习区待定商品 ${String(index + 1).padStart(2, "0")}`)
       }
     ];
 
@@ -565,6 +644,7 @@
     const categorySelect = document.querySelector("#category");
     const productSelect = document.querySelector("#product");
     const quantityInput = document.querySelector("#quantity");
+    const specInput = document.querySelector("#spec");
     const deliverySelect = document.querySelector("#delivery");
     const prevButton = document.querySelector("#prevStep");
     const nextButton = document.querySelector("#nextStep");
@@ -572,6 +652,7 @@
     const stepLabels = [...document.querySelectorAll(".step")];
     const summaryCategory = document.querySelector("#summaryCategory");
     const summaryProduct = document.querySelector("#summaryProduct");
+    const summarySpec = document.querySelector("#summarySpec");
     const summaryQuantity = document.querySelector("#summaryQuantity");
     const summaryDelivery = document.querySelector("#summaryDelivery");
     const summaryPayment = document.querySelector("#summaryPayment");
@@ -597,6 +678,7 @@
     function updateSummary() {
       summaryCategory.textContent = categories[Number(categorySelect.value)].name;
       summaryProduct.textContent = productSelect.value;
+      summarySpec.textContent = specInput.value.trim() || "未填写";
       summaryQuantity.textContent = quantityInput.value || "1";
       summaryDelivery.textContent = deliverySelect.value;
       summaryPayment.textContent = getPaymentValue();
@@ -616,19 +698,37 @@
       return fields.every((field) => field.reportValidity());
     }
 
-    function submitOrder() {
+    function getApiUrl(path) {
+      const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+      const isStaticPreview = window.location.protocol === "file:" || (isLocalHost && window.location.port && window.location.port !== "3000");
+      return isStaticPreview ? `http://127.0.0.1:3000${path}` : path;
+    }
+
+    async function submitOrder() {
       const data = Object.fromEntries(new FormData(form).entries());
       const order = {
         ...data,
         category: categories[Number(categorySelect.value)].name,
         product: productSelect.value,
-        createdAt: new Date().toISOString(),
-        code: `BEE-${Date.now().toString().slice(-6)}`
+        spec: specInput.value.trim() || "未填写",
+        submittedAt: new Date().toISOString()
       };
-      const orders = JSON.parse(localStorage.getItem("beeOrders") || "[]");
-      orders.unshift(order);
-      localStorage.setItem("beeOrders", JSON.stringify(orders));
-      orderCode.textContent = `订单编号：${order.code}`;
+
+      nextButton.disabled = true;
+      nextButton.textContent = "提交中";
+
+      const response = await fetch(getApiUrl("/api/orders"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+      });
+
+      if (!response.ok) {
+        throw new Error("订单提交失败");
+      }
+
+      const result = await response.json();
+      orderCode.textContent = result.orderCode ? `订单编号：${result.orderCode}` : "";
       success.classList.add("is-open");
       form.style.display = "none";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -641,10 +741,17 @@
     form.addEventListener("input", updateSummary);
     form.addEventListener("change", updateSummary);
     prevButton.addEventListener("click", () => setStep(Math.max(0, currentStep - 1)));
-    nextButton.addEventListener("click", () => {
+    nextButton.addEventListener("click", async () => {
       if (!validateCurrentStep()) return;
       if (currentStep === stepPanels.length - 1) {
-        submitOrder();
+        try {
+          await submitOrder();
+        } catch (error) {
+          console.error(error);
+          nextButton.disabled = false;
+          nextButton.textContent = "提交订单";
+          alert("提交失败，请稍后再试。");
+        }
         return;
       }
       setStep(currentStep + 1);
@@ -652,8 +759,15 @@
 
     renderCategories();
 
-    const selectedProduct = new URLSearchParams(window.location.search).get("product");
-    const selectedCategoryIndex = categories.findIndex((category) => category.products.includes(selectedProduct));
+    const query = new URLSearchParams(window.location.search);
+    const selectedProduct = query.get("product");
+    const selectedCategory = query.get("category");
+    const exactCategoryIndex = categories.findIndex((category) => (
+      category.name === selectedCategory && category.products.includes(selectedProduct)
+    ));
+    const selectedCategoryIndex = exactCategoryIndex >= 0
+      ? exactCategoryIndex
+      : categories.findIndex((category) => category.products.includes(selectedProduct));
     if (selectedCategoryIndex >= 0) {
       categorySelect.value = String(selectedCategoryIndex);
     }

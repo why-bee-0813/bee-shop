@@ -250,6 +250,29 @@
       color: var(--muted);
     }
 
+    .category-tools {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .category-tools .button {
+      padding: 10px 14px;
+      min-height: 0;
+      font-size: 13px;
+    }
+
+    .category-tools .button[hidden] {
+      display: none;
+    }
+
+    .button[disabled] {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
     .catalog {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -780,7 +803,7 @@
       <div>
         <span class="eyebrow">Mystery Catalog</span>
         <h1>本期商品</h1>
-        <p class="intro">先按零食区、正餐区、娱乐区和学习区整理商品。点开商品可以查看详情并加入购物车，右侧悬浮窗会实时汇总数量和金额。</p>
+        <p class="intro">先按休闲零食区、饮品区、正餐区、娱乐区和学习区整理商品。点开商品可以查看详情并加入购物车，右侧悬浮窗会实时汇总数量和金额。</p>
       </div>
       <button class="button" id="heroCartButton" type="button">查看购物车</button>
     </section>
@@ -791,7 +814,10 @@
         <h2 id="categoryTitle"></h2>
         <p id="categoryDescription"></p>
       </div>
-      <span class="price" id="categoryCount"></span>
+      <div class="category-tools">
+        <button class="button secondary" id="subcategoryBackButton" type="button" hidden>返回上一级</button>
+        <span class="price" id="categoryCount"></span>
+      </div>
     </section>
     <section class="catalog" id="catalog" aria-label="商品列表"></section>
 
@@ -826,7 +852,7 @@
         <ul class="detail-list" id="modalDetails"></ul>
         <div class="modal-actions">
           <button class="button secondary" id="addCartButton" type="button">加入购物车</button>
-          <button class="button" id="modalCartButton" type="button">查看购物车</button>
+          <button class="button" id="modalOrderButton" type="button">立即下单</button>
         </div>
       </div>
     </div>
@@ -861,66 +887,296 @@
 
   <script>
     const shapeTypes = ["jar", "round", "box", "pouch"];
-    const productSeeds = {
-      "零食区": [
-        ["蜂蜜黄油薯片", 18, "咸甜口味的小份零食，适合下午茶和追剧。"],
-        ["草莓夹心饼干", 22, "独立小包装，酸甜口感更适合分享。"],
-        ["海盐芝士脆卷", 26, "口感轻盈，芝士香气明显。"],
-        ["焦糖坚果混合包", 39, "坚果和焦糖碎组合，适合作为小礼物。"]
-      ],
-      "正餐区": [
-        ["番茄牛肉意面", 48, "酸甜番茄底配牛肉粒，适合快捷正餐。"],
-        ["咖喱鸡肉饭", 42, "温和咖喱味，饱腹感稳定。"],
-        ["照烧鸡腿便当", 46, "甜咸照烧汁，配菜可按库存调整。"],
-        ["奶油蘑菇焗饭", 45, "奶香浓郁，适合偏温和口味。"]
-      ],
-      "娱乐区": [
-        ["电影夜惊喜盒", 69, "零食、饮品和小卡片组合，适合周末放松。"],
-        ["桌游补给包", 88, "适合聚会场景的小食和道具补充。"],
-        ["盲抽小礼物", 36, "随机小物，适合作为轻量惊喜。"],
-        ["约会气氛套装", 99, "蜡烛、卡片和甜点的组合建议。"]
-      ],
-      "学习区": [
-        ["高效计划本", 32, "一周计划、任务拆解和复盘页。"],
-        ["柔色便签套装", 19, "多色便签，适合标记重点。"],
-        ["桌面整理小盒", 29, "收纳笔、夹子和零散小物。"],
-        ["专注学习补给包", 58, "文具、便签和小零食组合。"]
-      ]
-    };
-
-    function createProducts(categoryName) {
-      return productSeeds[categoryName].map(([name, price, summary], index) => ({
-        id: `${categoryName}-${index + 1}`,
+    const snackCategoryName = "休闲零食区";
+    function createSnackProduct(name, summary, note, tags) {
+      return {
         name,
-        price,
-        category: categoryName,
         summary,
-        tags: [categoryName, index % 2 === 0 ? "现货" : "可预订"],
         details: [
-          `价格：¥${price}`,
-          `分类：${categoryName}`,
-          index % 2 === 0 ? "库存：少量现货" : "库存：下单后确认",
-          "备注：图片为页面示意，可替换为真实商品图"
+          "价格：0元",
+          `分类：${snackCategoryName}`,
+          "库存：99+",
+          `备注：${note}`
+        ],
+        tags: [snackCategoryName, ...tags]
+      };
+    }
+
+    const snackProducts = [
+      createSnackProduct("麻辣王子辣条", "经典麻辣风味辣条，口感筋道，适合想吃重口小零食时来一包。", "麻辣鲜香，适合搭配饮料一起享用", ["辣条", "麻辣"]),
+      createSnackProduct("卫龙辣条", "甜辣咸香的经典辣条，入口柔韧有嚼劲，是休闲零食区的人气款。", "经典卫龙风味，适合日常解馋", ["辣条", "卫龙"]),
+      createSnackProduct("卫龙魔芋爽", "爽脆弹牙的魔芋小零食，香辣开胃，适合想吃轻负担辣味时选择。", "口感脆爽，辣味清爽不腻", ["魔芋", "卫龙"]),
+      createSnackProduct("卫龙亲嘴烧", "小包装豆制品辣味零食，香辣入味，方便分享也方便随手吃。", "独立小份包装，适合分着吃", ["亲嘴烧", "卫龙"]),
+      createSnackProduct("缺牙齿", "香脆有趣的小零食，名字可爱，适合放在零食篮里当轻松小惊喜。", "口感酥脆，适合休闲解馋", ["香脆", "趣味"]),
+      createSnackProduct("劲仔小鱼", "鲜香入味的小鱼零食，肉质紧实有嚼劲，适合喜欢咸香辣味的人。", "咸香微辣，适合作为追剧小零食", ["小鱼", "咸香"]),
+      createSnackProduct("鸡脚筋", "弹韧有嚼劲的风味鸡脚筋，香辣入味，适合慢慢嚼着解馋。", "口感筋道，适合喜欢卤味口感的人", ["鸡脚筋", "卤味"]),
+      createSnackProduct("火腿纯肉肠", "肉香浓郁的纯肉火腿肠，开袋即食，适合补充一点咸香滋味。", "肉感扎实，适合作为随手小食", ["火腿肠", "肉肠"]),
+      createSnackProduct("玉米火腿肠", "带有玉米清甜的火腿肠，咸甜平衡，口感柔嫩又方便分享。", "玉米甜香明显，适合清爽口味", ["火腿肠", "玉米"]),
+      createSnackProduct("乐事薯片", "薄脆爽口的经典薯片，香味直接，适合追剧、聊天和下午茶。", "片片酥脆，适合多人分享", ["薯片", "乐事"]),
+      createSnackProduct("旺仔小馒头", "入口酥松的小馒头，奶香轻甜，适合喜欢温和甜口零食的人。", "奶香松脆，适合轻甜解馋", ["饼干", "奶香"]),
+      createSnackProduct("百醇", "酥脆饼干棒包裹香甜夹心，口感层次丰富，适合当甜味小点心。", "饼干香脆，夹心顺滑", ["饼干", "夹心"]),
+      createSnackProduct("趣多多", "巧克力豆曲奇饼干，酥香浓郁，适合喜欢可可甜香的人。", "曲奇酥香，巧克力风味足", ["曲奇", "巧克力"]),
+      createSnackProduct("好丽友派", "松软蛋糕夹心外裹巧克力风味，甜度饱满，适合当小甜点。", "口感绵软，适合搭配茶饮", ["派", "甜点"]),
+      createSnackProduct("奥利奥", "经典夹心饼干，酥脆饼干搭配甜香夹心，适合分享或搭配牛奶。", "经典夹心口味，适合扭一扭泡一泡", ["饼干", "夹心"]),
+      createSnackProduct("板栗", "软糯香甜的板栗小食，栗香自然，适合想吃温和饱腹零食时选择。", "栗香浓郁，口感软糯", ["板栗", "甜香"]),
+      createSnackProduct("巧克力", "香甜顺滑的巧克力零食，适合补充一点甜味和满足感。", "可可香气明显，适合甜食爱好者", ["巧克力", "甜食"]),
+      createSnackProduct("干脆面", "捏碎就能吃的香脆干脆面，调味浓郁，是经典怀旧小零食。", "酥脆耐嚼，适合边玩边吃", ["干脆面", "香脆"]),
+      createSnackProduct("可比克薯片", "厚实香脆的可比克薯片，薯香明显，适合喜欢脆口零食的人。", "薯香浓，口感清脆", ["薯片", "可比克"]),
+      createSnackProduct("海苔片", "薄脆咸鲜的海苔片，海味清爽，适合想吃轻口零食时选择。", "咸鲜薄脆，适合轻松解馋", ["海苔", "咸鲜"])
+    ];
+    const drinkBrands = [
+      "茶颜悦色",
+      "茶百道",
+      "喜茶",
+      "霸王茶姬",
+      "蜜雪冰城",
+      "茉酸奶",
+      "CoCo都可",
+      "古茗",
+      "沪上阿姨"
+    ].map((name, index) => ({
+      id: `drink-brand-${index + 1}`,
+      name,
+      price: null,
+      category: "饮品区",
+      summary: `${name}饮品品牌入口，点击进入查看该品牌的待定饮品商品。`,
+      tags: ["饮品区", "品牌", name],
+      shape: shapeTypes[index % shapeTypes.length]
+    }));
+
+    function createDrinkProducts(brandName) {
+      return Array.from({ length: 10 }, (_, index) => ({
+        id: `饮品区-${brandName}-${index + 1}`,
+        name: `${brandName}待定商品 ${String(index + 1).padStart(2, "0")}`,
+        price: null,
+        category: `饮品区 / ${brandName}`,
+        summary: `${brandName}饮品商品信息待定，后续可替换为指定饮品。`,
+        tags: ["饮品区", brandName, "待定"],
+        details: [
+          "价格：待定",
+          `分类：饮品区 / ${brandName}`,
+          "库存：待定",
+          "备注：等待上传指定饮品信息与真实商品图"
+        ],
+        shape: shapeTypes[index % shapeTypes.length]
+      }));
+    }
+    const mealCuisineNames = [
+      "汉堡薯条",
+      "西餐",
+      "火锅",
+      "烧烤",
+      "烤肉（烤鱼）",
+      "日式料理",
+      "韩式料理",
+      "家常菜",
+      "粤菜",
+      "东北菜",
+      "自助餐（烤肉自助、火锅自助）",
+      "特色菜"
+    ];
+    const mealCuisines = mealCuisineNames.map((name, index) => ({
+      id: `meal-cuisine-${index + 1}`,
+      name,
+      price: null,
+      category: "正餐区",
+      summary: `${name}菜系入口，点击进入查看该菜系的待定商品。`,
+      tags: ["正餐区", "菜系", name],
+      shape: shapeTypes[index % shapeTypes.length]
+    }));
+
+    function createMealProducts(cuisineName) {
+      return Array.from({ length: 5 }, (_, index) => ({
+        id: `正餐区-${cuisineName}-${index + 1}`,
+        name: `${cuisineName}待定商品 ${String(index + 1).padStart(2, "0")}`,
+        price: null,
+        category: `正餐区 / ${cuisineName}`,
+        summary: `${cuisineName}商品信息待定，后续可替换为指定菜品。`,
+        tags: ["正餐区", cuisineName, "待定"],
+        details: [
+          "价格：待定",
+          `分类：正餐区 / ${cuisineName}`,
+          "库存：待定",
+          "备注：等待上传指定菜品信息与真实商品图"
+        ],
+        shape: shapeTypes[index % shapeTypes.length]
+      }));
+    }
+    const entertainmentSections = [
+      {
+        name: "电脑游戏陪玩",
+        mode: "modules",
+        moduleLabel: "游戏",
+        modules: ["无畏契约", "三角洲行动", "斗地主", "steam游戏"]
+      },
+      {
+        name: "手机游戏陪玩",
+        mode: "modules",
+        moduleLabel: "手游",
+        modules: ["洛克王国（hot！）", "王者荣耀", "心动小镇", "金铲铲之战", "三角洲行动（手游版）"]
+      },
+      {
+        name: "拍美照服务",
+        mode: "detail",
+        details: [
+          "拍摄张数：待选择",
+          "拍摄设备：手机 / 相机待确认",
+          "修图服务：待确认",
+          "交付方式：待确认"
+        ]
+      },
+      {
+        name: "抱抱服务",
+        mode: "detail",
+        details: [
+          "抱抱时长：待选择",
+          "服务形式：线下确认",
+          "备注：以双方舒适和明确同意为前提"
+        ]
+      },
+      {
+        name: "亲亲服务",
+        mode: "detail",
+        details: [
+          "亲亲部位：额头 / 眼睛 / 鼻子 / 耳朵",
+          "服务形式：线下确认",
+          "备注：仅展示非私密、非性化选项，以双方明确同意为前提"
+        ]
+      },
+      {
+        name: "色色服务",
+        mode: "notice",
+        details: [
+          "目前只接受线下订货，相关链接正在建设中..."
+        ],
+        unavailable: true
+      },
+      {
+        name: "其他服务（持续开发中）",
+        mode: "notice",
+        details: [
+          "更多娱乐服务正在持续开发中。"
+        ],
+        unavailable: true
+      }
+    ].map((item, index) => ({
+      id: `entertainment-section-${index + 1}`,
+      price: null,
+      category: "娱乐区",
+      summary: item.mode === "modules" ? `${item.name}入口，点击进入查看可选${item.moduleLabel}模块。` : `${item.name}详情入口，点击查看当前服务说明。`,
+      tags: ["娱乐区", item.mode === "modules" ? "陪玩" : "服务", item.name],
+      shape: shapeTypes[index % shapeTypes.length],
+      ...item
+    }));
+
+    function createEntertainmentModuleEntries(sectionName) {
+      const section = entertainmentSections.find((item) => item.name === sectionName);
+      if (!section || section.mode !== "modules") return [];
+      return section.modules.map((name, index) => ({
+        id: `娱乐区-${sectionName}-${index + 1}`,
+        name,
+        price: null,
+        category: `娱乐区 / ${sectionName}`,
+        summary: `${name}模块入口，点击进入查看待定陪玩商品。`,
+        tags: ["娱乐区", sectionName, name],
+        shape: shapeTypes[index % shapeTypes.length],
+        moduleName: name
+      }));
+    }
+
+    function createEntertainmentProducts(sectionName, moduleName) {
+      return Array.from({ length: 5 }, (_, index) => ({
+        id: `娱乐区-${sectionName}-${moduleName}-${index + 1}`,
+        name: `${moduleName}待定商品 ${String(index + 1).padStart(2, "0")}`,
+        price: null,
+        category: `娱乐区 / ${sectionName} / ${moduleName}`,
+        summary: `${moduleName}陪玩商品信息待定，后续可替换为指定服务。`,
+        tags: ["娱乐区", sectionName, moduleName, "待定"],
+        details: [
+          "价格：待定",
+          `分类：娱乐区 / ${sectionName} / ${moduleName}`,
+          "库存：待定",
+          "备注：等待上传指定陪玩服务信息"
         ],
         shape: shapeTypes[index % shapeTypes.length]
       }));
     }
 
+    function createEntertainmentDetailProduct(section) {
+      return {
+        id: `娱乐区-${section.name}`,
+        name: section.name,
+        price: null,
+        category: "娱乐区",
+        summary: section.mode === "notice" ? section.details[0] : `${section.name}当前可选项如下，后续可继续补充。`,
+        tags: section.tags,
+        details: section.details,
+        shape: section.shape,
+        unavailable: section.unavailable
+      };
+    }
+
+    function createProducts(categoryName) {
+      return Array.from({ length: 20 }, (_, index) => {
+        const snackProduct = categoryName === snackCategoryName ? snackProducts[index] : null;
+
+        return {
+          id: `${categoryName}-${index + 1}`,
+          name: snackProduct?.name || `${categoryName}待定商品 ${String(index + 1).padStart(2, "0")}`,
+          price: snackProduct ? 0 : null,
+          category: categoryName,
+          summary: snackProduct?.summary || "商品信息待定，后续可替换为指定商品。",
+          tags: snackProduct?.tags || [categoryName, "待定"],
+          details: snackProduct?.details || [
+            "价格：待定",
+            `分类：${categoryName}`,
+            "库存：待定",
+            "备注：等待上传指定商品信息与真实商品图"
+          ],
+          shape: shapeTypes[index % shapeTypes.length]
+        };
+      });
+    }
+
     const categories = [
       {
-        name: "零食区",
+        name: snackCategoryName,
         description: "适合随手投喂、下午茶和小惊喜的商品分类。",
-        products: createProducts("零食区")
+        products: createProducts(snackCategoryName)
+      },
+      {
+        name: "饮品区",
+        type: "subcategories",
+        itemLabel: "品牌",
+        childTitlePrefix: "饮品区",
+        childDescription: (itemName) => `${itemName}饮品商品页，目前预留 10 个待定商品。`,
+        createChildProducts: createDrinkProducts,
+        description: "先按饮品品牌浏览，点击品牌后进入该品牌的商品页。",
+        subcategories: drinkBrands
       },
       {
         name: "正餐区",
-        description: "适合认真吃饭、饱腹搭配和日常正餐选择的商品分类。",
-        products: createProducts("正餐区")
+        type: "subcategories",
+        itemLabel: "菜系",
+        childTitlePrefix: "正餐区",
+        childDescription: (itemName) => `${itemName}商品页，目前预留 5 个待定商品。`,
+        createChildProducts: createMealProducts,
+        description: "先按菜系浏览，点击菜系后进入该菜系的商品页。",
+        subcategories: mealCuisines
       },
       {
         name: "娱乐区",
-        description: "适合放松、休闲、约会和制造小惊喜的商品分类。",
-        products: createProducts("娱乐区")
+        type: "subcategories",
+        itemLabel: "服务",
+        childTitlePrefix: "娱乐区",
+        childDescription: (itemName) => {
+          const section = entertainmentSections.find((item) => item.name === itemName);
+          if (section?.mode === "modules") return `${itemName}模块页，点击具体模块后查看待定商品。`;
+          return `${itemName}详情页。`;
+        },
+        createChildProducts: createEntertainmentModuleEntries,
+        description: "先按娱乐服务浏览，点击服务后进入对应模块或查看详情。",
+        subcategories: entertainmentSections
       },
       {
         name: "学习区",
@@ -930,12 +1186,15 @@
     ];
 
     let activeCategoryIndex = 0;
+    let activeSubcategoryIndex = null;
+    let activeModuleIndex = null;
     let currentProduct = null;
 
     const categoryTabs = document.querySelector("#categoryTabs");
     const categoryTitle = document.querySelector("#categoryTitle");
     const categoryDescription = document.querySelector("#categoryDescription");
     const categoryCount = document.querySelector("#categoryCount");
+    const subcategoryBackButton = document.querySelector("#subcategoryBackButton");
     const catalog = document.querySelector("#catalog");
     const modal = document.querySelector("#productModal");
     const modalTitle = document.querySelector("#modalTitle");
@@ -945,7 +1204,7 @@
     const modalDetails = document.querySelector("#modalDetails");
     const modalShapeWrap = document.querySelector("#modalShapeWrap");
     const addCartButton = document.querySelector("#addCartButton");
-    const modalCartButton = document.querySelector("#modalCartButton");
+    const modalOrderButton = document.querySelector("#modalOrderButton");
     const closeButton = document.querySelector(".modal-close");
     const cartOverlay = document.querySelector("#cartOverlay");
     const cartCloseButton = document.querySelector("#cartCloseButton");
@@ -975,7 +1234,18 @@
     }
 
     function formatPrice(value) {
+      if (value === null || value === undefined || value === "") {
+        return "待定";
+      }
       return `¥${Number(value || 0).toFixed(0)}`;
+    }
+
+    function getCartTotal(cart) {
+      if (cart.some((item) => item.price === null || item.price === undefined || item.price === "")) {
+        return null;
+      }
+
+      return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
 
     function renderCategoryTabs() {
@@ -993,11 +1263,62 @@
 
     function renderProducts() {
       const category = categories[activeCategoryIndex];
-      categoryTitle.textContent = category.name;
-      categoryDescription.textContent = category.description;
-      categoryCount.textContent = `${category.products.length} 件商品`;
-      catalog.innerHTML = category.products.map((product, index) => `
-        <button class="product" type="button" data-index="${index}" data-shape="${product.shape}" aria-label="查看${product.name}详情">
+      const hasSubcategories = category.type === "subcategories";
+      const activeSubcategory = hasSubcategories && activeSubcategoryIndex !== null ? category.subcategories[activeSubcategoryIndex] : null;
+      const isEntertainment = category.name === "娱乐区";
+      const activeModule = isEntertainment && activeSubcategory?.mode === "modules" && activeModuleIndex !== null
+        ? activeSubcategory.modules[activeModuleIndex]
+        : null;
+      const products = activeModule
+        ? createEntertainmentProducts(activeSubcategory.name, activeModule)
+        : activeSubcategory
+          ? category.createChildProducts(activeSubcategory.name)
+          : category.products;
+
+      categoryTitle.textContent = activeModule
+        ? `${category.childTitlePrefix} / ${activeSubcategory.name} / ${activeModule}`
+        : activeSubcategory
+          ? `${category.childTitlePrefix} / ${activeSubcategory.name}`
+          : category.name;
+      categoryDescription.textContent = activeModule
+        ? `${activeModule}陪玩商品页，目前预留 5 个待定商品。`
+        : activeSubcategory
+          ? category.childDescription(activeSubcategory.name)
+          : category.description;
+      categoryCount.textContent = activeSubcategory
+        ? `${products.length} ${activeSubcategory.mode === "modules" && !activeModule ? `个${activeSubcategory.moduleLabel}` : "件商品"}`
+        : `${hasSubcategories ? category.subcategories.length : products.length} ${hasSubcategories ? `个${category.itemLabel}` : "件商品"}`;
+      subcategoryBackButton.textContent = activeModule
+        ? `返回${activeSubcategory.name}模块`
+        : hasSubcategories
+          ? `返回${category.name}${category.itemLabel}`
+          : "返回上一级";
+      subcategoryBackButton.hidden = !activeSubcategory;
+
+      if (hasSubcategories && !activeSubcategory) {
+        catalog.innerHTML = category.subcategories.map((subcategory, index) => `
+          <button class="product" type="button" data-subcategory-index="${index}" data-shape="${subcategory.shape}" aria-label="进入${subcategory.name}商品页">
+            <div class="product-visual">
+              <div class="product-shape" aria-hidden="true"></div>
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>${subcategory.name}</h3>
+                <span class="price">${category.itemLabel}</span>
+              </div>
+              <p>${subcategory.summary}</p>
+              <div class="tag-row">
+                ${subcategory.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+              </div>
+              <span class="product-action">进入${category.itemLabel}</span>
+            </div>
+          </button>
+        `).join("");
+        return;
+      }
+
+      catalog.innerHTML = products.map((product, index) => `
+        <button class="product" type="button" data-index="${index}" data-shape="${product.shape}" aria-label="${isEntertainment && activeSubcategory?.mode === "modules" && !activeModule ? `进入${product.name}商品页` : `查看${product.name}详情`}">
           <div class="product-visual">
             <div class="product-shape" aria-hidden="true"></div>
           </div>
@@ -1010,7 +1331,7 @@
             <div class="tag-row">
               ${product.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
             </div>
-            <span class="product-action">查看详情</span>
+            <span class="product-action">${isEntertainment && activeSubcategory?.mode === "modules" && !activeModule ? "进入模块" : "查看详情"}</span>
           </div>
         </button>
       `).join("");
@@ -1024,7 +1345,10 @@
       modalTags.innerHTML = product.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
       modalDetails.innerHTML = product.details.map((detail) => `<li>${detail}</li>`).join("");
       modalShapeWrap.dataset.shape = product.shape;
-      addCartButton.textContent = "加入购物车";
+      addCartButton.textContent = product.unavailable ? "暂不可下单" : "加入购物车";
+      addCartButton.disabled = Boolean(product.unavailable);
+      modalOrderButton.textContent = product.unavailable ? "暂不可下单" : "立即下单";
+      modalOrderButton.disabled = Boolean(product.unavailable);
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       closeButton.focus();
@@ -1078,7 +1402,7 @@
     function renderCart() {
       const cart = getCart();
       const count = cart.reduce((total, item) => total + item.quantity, 0);
-      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const total = getCartTotal(cart);
 
       document.querySelectorAll("[data-cart-count]").forEach((node) => {
         node.textContent = String(count);
@@ -1110,7 +1434,7 @@
                 <h3>${item.name}</h3>
                 <small>${item.category}</small>
               </div>
-              <strong>${formatPrice(item.price * item.quantity)}</strong>
+              <strong>${formatPrice(item.price === null || item.price === undefined || item.price === "" ? null : item.price * item.quantity)}</strong>
             </div>
             <div class="cart-controls">
               <div class="qty-controls" aria-label="${item.name}数量">
@@ -1126,7 +1450,7 @@
     }
 
     function addCurrentProductToCart() {
-      if (!currentProduct) return;
+      if (!currentProduct || currentProduct.unavailable) return;
       addProductToCart(currentProduct);
       addCartButton.textContent = "已加入购物车";
       window.setTimeout(() => {
@@ -1134,26 +1458,72 @@
       }, 1100);
     }
 
+    function orderCurrentProduct() {
+      if (!currentProduct || currentProduct.unavailable) return;
+      const params = new URLSearchParams({
+        category: currentProduct.category,
+        product: currentProduct.name
+      });
+      window.location.href = `checkout.html?${params.toString()}`;
+    }
+
     catalog.addEventListener("click", (event) => {
       const productCard = event.target.closest(".product");
       if (!productCard) return;
-      openModal(categories[activeCategoryIndex].products[Number(productCard.dataset.index)]);
+      const category = categories[activeCategoryIndex];
+      if (category.type === "subcategories" && productCard.dataset.subcategoryIndex !== undefined) {
+        const nextSubcategoryIndex = Number(productCard.dataset.subcategoryIndex);
+        const nextSubcategory = category.subcategories[nextSubcategoryIndex];
+        if (category.name === "娱乐区" && nextSubcategory.mode !== "modules") {
+          openModal(createEntertainmentDetailProduct(nextSubcategory));
+          return;
+        }
+        activeSubcategoryIndex = nextSubcategoryIndex;
+        activeModuleIndex = null;
+        renderProducts();
+        return;
+      }
+
+      if (category.name === "娱乐区" && activeSubcategoryIndex !== null) {
+        const section = category.subcategories[activeSubcategoryIndex];
+        if (section.mode === "modules" && activeModuleIndex === null) {
+          activeModuleIndex = Number(productCard.dataset.index);
+          renderProducts();
+          return;
+        }
+      }
+
+      const products = category.type === "subcategories" && activeSubcategoryIndex !== null
+        ? category.name === "娱乐区" && activeModuleIndex !== null
+          ? createEntertainmentProducts(category.subcategories[activeSubcategoryIndex].name, category.subcategories[activeSubcategoryIndex].modules[activeModuleIndex])
+          : category.createChildProducts(category.subcategories[activeSubcategoryIndex].name)
+        : category.products;
+      openModal(products[Number(productCard.dataset.index)]);
     });
 
     categoryTabs.addEventListener("click", (event) => {
       const tab = event.target.closest(".category-tab");
       if (!tab) return;
       activeCategoryIndex = Number(tab.dataset.category);
+      activeSubcategoryIndex = null;
+      activeModuleIndex = null;
       renderCategoryTabs();
+      renderProducts();
+    });
+
+    subcategoryBackButton.addEventListener("click", () => {
+      if (activeModuleIndex !== null) {
+        activeModuleIndex = null;
+        renderProducts();
+        return;
+      }
+      activeSubcategoryIndex = null;
       renderProducts();
     });
 
     closeButton.addEventListener("click", closeModal);
     addCartButton.addEventListener("click", addCurrentProductToCart);
-    modalCartButton.addEventListener("click", () => {
-      closeModal();
-      openCart();
-    });
+    modalOrderButton.addEventListener("click", orderCurrentProduct);
     modal.addEventListener("click", (event) => {
       if (event.target === modal) closeModal();
     });
