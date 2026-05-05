@@ -6,13 +6,15 @@
   <title>小蜜蜂的神秘商店</title>
   <style>
     :root {
-      --ink: #2f2528;
-      --muted: #7b686e;
-      --line: #f2d9df;
+      --ink: #123340;
+      --muted: #557382;
+      --line: #bfe7ec;
       --paper: #ffffff;
-      --soft: #fff7df;
-      --pink: #f7a9bd;
-      --pink-soft: #fff1f5;
+      --soft: #fff6c7;
+      --sun: #ffd54a;
+      --lagoon: #52c7d8;
+      --coral: #ff7f6f;
+      --sand: #fff0b3;
       --white: #ffffff;
       --max: 1120px;
       --side: clamp(18px, 4vw, 40px);
@@ -31,9 +33,9 @@
       font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 0%, rgba(247, 169, 189, 0.28), transparent 30rem),
-        radial-gradient(circle at 88% 10%, rgba(255, 212, 92, 0.26), transparent 28rem),
-        linear-gradient(180deg, #fff8fb 0%, #ffffff 44%, #fff9e8 100%);
+        radial-gradient(circle at 12% 0%, rgba(82, 199, 216, 0.26), transparent 30rem),
+        radial-gradient(circle at 88% 10%, rgba(255, 213, 74, 0.36), transparent 28rem),
+        linear-gradient(180deg, #e9fbff 0%, #ffffff 44%, #fff6d7 100%);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -83,12 +85,12 @@
       place-items: center;
       width: 42px;
       height: 42px;
-      border: 1px solid rgba(247, 169, 189, 0.5);
+      border: 1px solid rgba(82, 199, 216, 0.5);
       border-radius: 50%;
-      background: var(--white);
-      color: #c94f78;
+      background: linear-gradient(145deg, #ffffff, #fff4a8);
+      color: #09758c;
       font-size: 20px;
-      box-shadow: 0 12px 30px rgba(247, 169, 189, 0.16);
+      box-shadow: 0 12px 30px rgba(82, 199, 216, 0.18);
     }
 
     .brand span:last-child {
@@ -119,7 +121,7 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 18px;
-      color: #c94f78;
+      color: #07829b;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -168,7 +170,7 @@
       justify-content: center;
       min-height: 48px;
       padding: 0 22px;
-      border: 1px solid #f0a8b9;
+      border: 1px solid #31b7cb;
       border-radius: 999px;
       font-size: 15px;
       font-weight: 700;
@@ -178,126 +180,48 @@
 
     .button.primary {
       color: var(--white);
-      background: #e75f8b;
-      box-shadow: 0 16px 32px rgba(231, 95, 139, 0.18);
+      background: #07829b;
+      box-shadow: 0 16px 32px rgba(7, 130, 155, 0.2);
     }
 
     .button.secondary {
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.82);
       color: var(--ink);
     }
 
     .button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 18px 36px rgba(247, 169, 189, 0.18);
+      box-shadow: 0 18px 36px rgba(82, 199, 216, 0.2);
     }
 
     .showcase {
       position: relative;
       min-height: clamp(340px, 40vw, 430px);
-      border: 1px solid rgba(247, 169, 189, 0.32);
+      border: 1px solid rgba(82, 199, 216, 0.36);
       border-radius: 8px;
       overflow: hidden;
       background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 241, 245, 0.9) 54%, rgba(255, 247, 223, 0.86));
-      box-shadow: 0 28px 70px rgba(247, 169, 189, 0.16);
+        radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.8) 0 5px, transparent 6px),
+        radial-gradient(circle at 82% 26%, rgba(255, 255, 255, 0.7) 0 7px, transparent 8px),
+        linear-gradient(145deg, rgba(229, 250, 255, 0.98), rgba(255, 246, 199, 0.92) 62%, rgba(255, 127, 111, 0.16));
+      box-shadow: 0 28px 70px rgba(82, 199, 216, 0.17);
     }
 
-    .cute-cat {
+    .showcase-image {
       position: absolute;
-      left: 50%;
-      top: 48%;
-      width: clamp(190px, 25vw, 260px);
-      height: clamp(190px, 25vw, 260px);
-      transform: translate(-50%, -50%);
-      border: 1px solid rgba(247, 169, 189, 0.42);
-      border-radius: 46% 46% 42% 42%;
-      background:
-        radial-gradient(circle at 50% 68%, rgba(255, 212, 92, 0.18) 0 26%, transparent 27%),
-        linear-gradient(180deg, #ffffff 0%, #fff7df 100%);
-      box-shadow: inset 18px -18px 42px rgba(247, 169, 189, 0.12), 0 28px 54px rgba(247, 169, 189, 0.22);
+      inset: clamp(18px, 4vw, 28px) clamp(18px, 4vw, 28px) 86px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 18px 38px rgba(18, 51, 64, 0.12);
     }
 
-    .cute-cat::before,
-    .cute-cat::after {
-      content: "";
-      position: absolute;
-      top: -8%;
-      width: 34%;
-      height: 34%;
-      border: 1px solid rgba(247, 169, 189, 0.4);
-      background: linear-gradient(145deg, #ffffff 0%, #fff1f5 100%);
-      transform: rotate(45deg);
-      z-index: -1;
-    }
-
-    .cute-cat::before {
-      left: 9%;
-      border-radius: 18px 10px 20px 10px;
-    }
-
-    .cute-cat::after {
-      right: 9%;
-      border-radius: 10px 18px 10px 20px;
-    }
-
-    .cat-bow {
-      position: absolute;
-      right: 17%;
-      top: 16%;
-      width: 58px;
-      height: 36px;
-      background:
-        radial-gradient(circle at 50% 50%, #e75f8b 0 8px, transparent 9px),
-        radial-gradient(ellipse at 22% 50%, #f7a9bd 0 18px, transparent 19px),
-        radial-gradient(ellipse at 78% 50%, #f7a9bd 0 18px, transparent 19px);
-      filter: drop-shadow(0 8px 12px rgba(231, 95, 139, 0.16));
-    }
-
-    .cat-eye {
-      position: absolute;
-      top: 46%;
-      width: 12px;
-      height: 18px;
-      border-radius: 999px;
-      background: var(--ink);
-    }
-
-    .cat-eye.left {
-      left: 35%;
-    }
-
-    .cat-eye.right {
-      right: 35%;
-    }
-
-    .cat-nose {
-      position: absolute;
-      left: 50%;
-      top: 56%;
-      width: 12px;
-      height: 9px;
-      border-radius: 999px;
-      background: #f7a9bd;
-      transform: translateX(-50%);
-    }
-
-    .cat-whisker {
-      position: absolute;
-      top: 58%;
-      width: 48px;
-      height: 1px;
-      background: rgba(123, 104, 110, 0.6);
-    }
-
-    .cat-whisker.left {
-      left: 12%;
-      box-shadow: 0 -12px 0 rgba(123, 104, 110, 0.5), 0 12px 0 rgba(123, 104, 110, 0.5);
-    }
-
-    .cat-whisker.right {
-      right: 12%;
-      box-shadow: 0 -12px 0 rgba(123, 104, 110, 0.5), 0 12px 0 rgba(123, 104, 110, 0.5);
+    .showcase-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     .note {
@@ -309,7 +233,7 @@
       justify-content: space-between;
       gap: 16px;
       padding-top: 18px;
-      border-top: 1px solid rgba(247, 169, 189, 0.24);
+      border-top: 1px solid rgba(82, 199, 216, 0.28);
       color: var(--muted);
       font-size: 13px;
     }
@@ -354,9 +278,9 @@
       transition: transform 180ms ease, box-shadow 180ms ease;
     }
 
-.product:hover {
+    .product:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 44px rgba(247, 169, 189, 0.14);
+      box-shadow: 0 20px 44px rgba(82, 199, 216, 0.16);
     }
 
     .product-visual {
@@ -364,7 +288,7 @@
       display: grid;
       place-items: center;
       background:
-        linear-gradient(135deg, rgba(247, 169, 189, 0.18), rgba(255, 212, 92, 0.18)),
+        linear-gradient(135deg, rgba(82, 199, 216, 0.18), rgba(255, 213, 74, 0.24)),
         var(--soft);
     }
 
@@ -372,22 +296,22 @@
       width: 96px;
       height: 126px;
       border-radius: 24px 24px 32px 32px;
-      background: linear-gradient(180deg, #ffe78f, #ffd45c);
-      box-shadow: inset 12px 0 24px rgba(255, 255, 255, 0.38), 0 18px 30px rgba(255, 212, 92, 0.22);
+      background: linear-gradient(180deg, #fff38a, #ffd54a);
+      box-shadow: inset 12px 0 24px rgba(255, 255, 255, 0.38), 0 18px 30px rgba(255, 213, 74, 0.24);
     }
 
     .product:nth-child(2) .product-shape {
       width: 128px;
       height: 98px;
       border-radius: 50%;
-      background: linear-gradient(145deg, #fff0b8, #f7a9bd);
+      background: linear-gradient(145deg, #75d6e4, #fff4a8);
     }
 
     .product:nth-child(3) .product-shape {
       width: 118px;
       height: 118px;
       border-radius: 22px;
-      background: linear-gradient(145deg, #ffffff, #ffd45c);
+      background: linear-gradient(145deg, #ffffff, #ffb5a9);
     }
 
     .product-body {
@@ -410,7 +334,7 @@
     }
 
     .price {
-      color: #c94f78;
+      color: #07829b;
       font-weight: 800;
       white-space: nowrap;
     }
@@ -430,9 +354,9 @@
 
     .tag {
       padding: 5px 10px;
-      border: 1px solid rgba(247, 169, 189, 0.34);
+      border: 1px solid rgba(82, 199, 216, 0.38);
       border-radius: 999px;
-      color: #c94f78;
+      color: #07829b;
       background: rgba(255, 255, 255, 0.78);
       font-size: 12px;
       font-weight: 700;
@@ -445,11 +369,12 @@
       align-items: center;
       margin-top: 10px;
       padding: clamp(24px, 5vw, 34px);
-      border: 1px solid rgba(247, 169, 189, 0.34);
+      border: 1px solid rgba(82, 199, 216, 0.36);
       border-radius: 8px;
-      background: linear-gradient(135deg, #fff1f5 0%, #ffffff 54%, #fff7df 100%);
+      background:
+        linear-gradient(135deg, rgba(255, 244, 168, 0.95) 0%, #ffffff 50%, rgba(117, 214, 228, 0.35) 100%);
       color: var(--ink);
-      box-shadow: 0 24px 58px rgba(247, 169, 189, 0.16);
+      box-shadow: 0 24px 58px rgba(82, 199, 216, 0.16);
     }
 
     .order p {
@@ -458,9 +383,9 @@
     }
 
     .order .button {
-      border-color: #f0a8b9;
+      border-color: #31b7cb;
       color: var(--white);
-      background: #e75f8b;
+      background: #07829b;
     }
 
     footer {
@@ -501,7 +426,7 @@
         width: 100%;
         justify-content: space-between;
         padding-top: 12px;
-        border-top: 1px solid rgba(247, 169, 189, 0.24);
+        border-top: 1px solid rgba(82, 199, 216, 0.28);
       }
 
       .section-head,
@@ -561,7 +486,11 @@
       }
 
       .showcase {
-        min-height: 320px;
+        min-height: 460px;
+      }
+
+      .showcase-image {
+        inset: 16px 14px 88px;
       }
 
       .note {
@@ -598,36 +527,31 @@
 
     <section class="hero" id="about">
       <div>
-        <span class="eyebrow">Private Honey Shop</span>
+        <span class="eyebrow">Bikini Bottom Summer Shop</span>
         <h1>小蜜蜂的神秘商店</h1>
         <p class="intro">
-          欢迎进入黄玉琳宝宝的专属投喂小店，老婆的开心，是本站唯一 KPI
+          欢迎来到黄玉琳宝宝的专属小店，今天也把开心、好吃和可爱都摆到你面前。
         </p>
         <div class="actions">
           <a class="button primary" href="products.html">查看商品</a>
           <a class="button secondary" href="checkout.html">立即下单</a>
         </div>
       </div>
-      <div class="showcase" aria-label="可爱商品展示">
-        <div class="cute-cat" aria-hidden="true">
-          <span class="cat-bow"></span>
-          <span class="cat-eye left"></span>
-          <span class="cat-eye right"></span>
-          <span class="cat-nose"></span>
-          <span class="cat-whisker left"></span>
-          <span class="cat-whisker right"></span>
+      <div class="showcase" aria-label="海绵宝宝比奇堡居民鱼图片展示">
+        <div class="showcase-image">
+          <img src="assets/images/%E6%AF%94%E5%A5%87%E5%A0%A1%E5%B1%85%E6%B0%91.jpg" alt="比奇堡居民">
         </div>
         <div class="note">
-          <span>让喜欢有回应 · 让心愿有着落</span>
-          <span>48 小时内确认订单</span>
+          <span>这里有一整份只想哄你开心的小惊喜</span>
+          <span>现货在架 · 看上就能下单</span>
         </div>
       </div>
     </section>
 
     <section class="section" id="products">
       <div class="section-head">
-        <h2>本期商品</h2>
-        <p>商品区已按休闲零食区、饮品区、正餐区、娱乐区和学习区整理，后续可继续替换或补充指定商品。</p>
+        <h2>今日现货宝藏</h2>
+        <p>不用蹲补货、不用等预售，点进去就是给你准备好的小快乐。想吃的、想喝的、想玩的，都可以直接挑。</p>
       </div>
 
       <div class="products">
@@ -637,13 +561,13 @@
           </div>
           <div class="product-body">
             <div class="product-top">
-              <h3>休闲零食区</h3>
+              <h3>零食快乐舱</h3>
               <span class="price">0元起</span>
             </div>
-            <p>已更新 20 个休闲零食商品，包含辣条、薯片、饼干、甜点和咸香小食。</p>
+            <p>嘴巴有点无聊的时候来这里，辣的、脆的、甜的都备好，适合边追剧边被投喂。</p>
             <div class="tag-row">
-              <span class="tag">休闲零食区</span>
-              <span class="tag">20款</span>
+              <span class="tag">马上拆</span>
+              <span class="tag">追剧搭子</span>
             </div>
           </div>
         </article>
@@ -654,13 +578,13 @@
           </div>
           <div class="product-body">
             <div class="product-top">
-              <h3>饮品区品牌</h3>
+              <h3>奶茶海流</h3>
               <span class="price">9个品牌</span>
             </div>
-            <p>已按茶颜悦色、茶百道、喜茶、霸王茶姬等品牌整理，每个品牌先预留 10 个待定商品。</p>
+            <p>想喝哪杯不用暗示太久，茶颜、喜茶、霸王茶姬这些小愿望，都能从这里漂到你手里。</p>
             <div class="tag-row">
-              <span class="tag">饮品区</span>
-              <span class="tag">品牌分类</span>
+              <span class="tag">今日想喝</span>
+              <span class="tag">甜度自由</span>
             </div>
           </div>
         </article>
@@ -671,13 +595,13 @@
           </div>
           <div class="product-body">
             <div class="product-top">
-              <h3>正餐区菜系</h3>
+              <h3>比奇堡饭点</h3>
               <span class="price">12个菜系</span>
             </div>
-            <p>已按汉堡薯条、西餐、火锅、烧烤、烤肉等菜系整理，每个菜系先预留 5 个待定商品。</p>
+            <p>纠结吃什么的时候直接点进来，汉堡、火锅、烧烤、烤肉都在，负责把“随便”变成好吃。</p>
             <div class="tag-row">
-              <span class="tag">正餐区</span>
-              <span class="tag">菜系分类</span>
+              <span class="tag">别饿着</span>
+              <span class="tag">今日正餐</span>
             </div>
           </div>
         </article>
@@ -688,13 +612,13 @@
           </div>
           <div class="product-body">
             <div class="product-top">
-              <h3>娱乐区服务</h3>
+              <h3>开心补给站</h3>
               <span class="price">7个入口</span>
             </div>
-            <p>已按电脑游戏陪玩、手机游戏陪玩、拍美照、抱抱等服务整理，游戏陪玩继续细分模块。</p>
+            <p>不只卖东西，也卖被认真陪着的时间。游戏、拍照、抱抱和小惊喜，都可以一键领取。</p>
             <div class="tag-row">
-              <span class="tag">娱乐区</span>
-              <span class="tag">服务分类</span>
+              <span class="tag">陪你玩</span>
+              <span class="tag">开心到账</span>
             </div>
           </div>
         </article>
@@ -704,10 +628,10 @@
     <section class="section" id="order">
       <div class="order">
         <div>
-          <h2>想要预订或咨询库存？</h2>
-          <p>点击下单链接填写信息，店主会按提交顺序确认商品、价格和发货安排。</p>
+          <h2>本店主打：现货快乐，马上拥有</h2>
+          <p>不用预订，不画大饼。页面里出现的就是今日可选清单，喜欢哪一个就直接下单，店主负责把这份小开心安排到位。</p>
         </div>
-        <a class="button" href="checkout.html">打开下单链接</a>
+        <a class="button" href="checkout.html">去领取今日快乐</a>
       </div>
     </section>
   </main>
