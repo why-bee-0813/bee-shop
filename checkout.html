@@ -331,6 +331,47 @@
       text-align: right;
     }
 
+    .cart-review {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .cart-review-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff8fb;
+    }
+
+    .cart-review-item span:first-child {
+      flex: 1;
+    }
+
+    .cart-review-item span:last-child {
+      font-weight: 800;
+      color: var(--pink-strong);
+    }
+
+    .cart-empty {
+      padding: 20px;
+      border: 1px dashed rgba(247, 169, 189, 0.58);
+      border-radius: 8px;
+      background: #fff8fb;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .cart-empty strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
     .success {
       display: none;
       padding: clamp(24px, 5vw, 34px);
@@ -419,123 +460,47 @@
 
     <section class="hero">
       <span class="eyebrow">Checkout</span>
-      <h1>确认下单</h1>
-      <p class="intro">按常见网购流程填写：选商品、留联系方式、确认配送和备注，提交后生成一条本地订单记录。</p>
+      <h1>确认订单</h1>
+      <p class="intro">最后确认一次商品清单，补上收货地址和备注，就可以送出订单啦。</p>
     </section>
 
-    <div class="steps" aria-label="下单步骤">
-      <div class="step is-active" data-step-label="0">1. 选择商品</div>
-      <div class="step" data-step-label="1">2. 联系信息</div>
-      <div class="step" data-step-label="2">3. 配送备注</div>
-      <div class="step" data-step-label="3">4. 确认提交</div>
-    </div>
-
     <section class="success" id="success">
-      <h2>点单成功，我已经收到啦。</h2>
-      <p>我会按提交顺序查看点单内容，并尽快确认后续安排。</p>
+      <h2>订单提交成功！</h2>
+      <p>我已经收到您的订单，会尽快核对商品、价格和配送安排。</p>
       <span class="success-code" id="orderCode"></span>
     </section>
 
     <form class="checkout" id="checkoutForm">
       <div class="panel">
-        <section class="form-step is-active" data-step="0">
-          <h2>选择想要的商品</h2>
-          <div class="field">
-            <label for="category">商品分类</label>
-            <select id="category" name="category"></select>
-          </div>
-          <div class="field">
-            <label for="product">商品名称</label>
-            <select id="product" name="product"></select>
-          </div>
-          <div class="field-grid">
-            <div class="field">
-              <label for="quantity">数量</label>
-              <input id="quantity" name="quantity" type="number" min="1" value="1" required>
-            </div>
-            <div class="field">
-              <label for="spec">规格</label>
-              <input id="spec" name="spec" type="text" placeholder="例如：奶茶 / 大杯 / 少冰 / 半糖">
-            </div>
-          </div>
-          <div class="field">
-            <label for="budget">预算或心理价位</label>
-            <input id="budget" name="budget" type="text" placeholder="例如：100 元以内">
-          </div>
+        <section>
+          <h2>核对商品清单</h2>
+          <div class="cart-review" id="cartReview"></div>
         </section>
 
-        <section class="form-step" data-step="1">
-          <h2>填写联系信息</h2>
-          <div class="field-grid">
-            <div class="field">
-              <label for="name">收件人</label>
-              <input id="name" name="name" type="text" autocomplete="name" required>
-            </div>
-            <div class="field">
-              <label for="phone">联系电话</label>
-              <input id="phone" name="phone" type="tel" autocomplete="tel" required>
-            </div>
-            <div class="field full">
-              <label for="contact">备用联系方式</label>
-              <input id="contact" name="contact" type="text" placeholder="微信号、邮箱或其它联系方式">
-            </div>
-          </div>
-        </section>
-
-        <section class="form-step" data-step="2">
-          <h2>配送和备注</h2>
+        <section>
+          <h2>收货与备注</h2>
           <div class="field">
             <label for="address">收货地址</label>
-            <textarea id="address" name="address" autocomplete="street-address" required></textarea>
+            <textarea id="address" name="address" autocomplete="street-address" required placeholder="填写详细收货地址，方便后续配送"></textarea>
           </div>
           <div class="field">
-            <label for="delivery">配送方式</label>
-            <select id="delivery" name="delivery">
-              <option value="快递配送">快递配送</option>
-              <option value="同城自取">同城自取</option>
-              <option value="先联系确认">先联系确认</option>
-            </select>
+            <label for="note">备注</label>
+            <textarea id="note" name="note" placeholder="想补充送货时间、替换偏好或祝福语，都可以写在这里（可选）"></textarea>
           </div>
-          <div class="field">
-            <label for="note">订单备注</label>
-            <textarea id="note" name="note" placeholder="口味偏好、送礼时间、祝福语等"></textarea>
+          <div class="actions">
+            <button class="button" id="submitOrder" type="submit">确认并提交</button>
           </div>
         </section>
-
-        <section class="form-step" data-step="3">
-          <h2>确认订单</h2>
-          <div class="pay-options">
-            <label class="option">
-              <input type="radio" name="payment" value="提交后联系付款" checked>
-              提交后联系付款
-            </label>
-            <label class="option">
-              <input type="radio" name="payment" value="微信确认">
-              微信确认
-            </label>
-            <label class="option">
-              <input type="radio" name="payment" value="到店或自取付款">
-              到店或自取付款
-            </label>
-          </div>
-        </section>
-
-        <div class="actions">
-          <button class="button secondary" id="prevStep" type="button">上一步</button>
-          <button class="button" id="nextStep" type="button">下一步</button>
-        </div>
       </div>
 
       <aside class="summary" aria-label="订单摘要">
         <h3>订单摘要</h3>
-        <ul class="summary-list">
-          <li><span>分类</span><strong id="summaryCategory">休闲零食区</strong></li>
-          <li><span>商品</span><strong id="summaryProduct">麻辣王子辣条</strong></li>
-          <li><span>规格</span><strong id="summarySpec">未填写</strong></li>
-          <li><span>数量</span><strong id="summaryQuantity">1</strong></li>
-          <li><span>配送</span><strong id="summaryDelivery">快递配送</strong></li>
-          <li><span>付款</span><strong id="summaryPayment">提交后联系付款</strong></li>
-        </ul>
+        <p id="summaryCount">共 0 件商品</p>
+        <ul class="summary-list" id="summaryItems"></ul>
+        <div class="cart-total">
+          <span>商品合计</span>
+          <strong id="summaryTotal">¥0</strong>
+        </div>
       </aside>
     </form>
   </main>
@@ -546,157 +511,76 @@
 
   <script src="config.js"></script>
   <script>
-    const snackProductNames = [
-      "麻辣王子辣条",
-      "卫龙辣条",
-      "卫龙魔芋爽",
-      "卫龙亲嘴烧",
-      "缺牙齿",
-      "劲仔小鱼",
-      "鸡脚筋",
-      "火腿纯肉肠",
-      "玉米火腿肠",
-      "乐事薯片",
-      "旺仔小馒头",
-      "百醇",
-      "趣多多",
-      "好丽友派",
-      "奥利奥",
-      "板栗",
-      "巧克力",
-      "干脆面",
-      "可比克薯片",
-      "海苔片"
-    ];
-    const drinkBrandNames = [
-      "茶颜悦色",
-      "茶百道",
-      "喜茶",
-      "霸王茶姬",
-      "蜜雪冰城",
-      "茉酸奶",
-      "CoCo都可",
-      "古茗",
-      "沪上阿姨"
-    ];
-    const createDrinkProductNames = (brandName) => Array.from(
-      { length: 10 },
-      (_, index) => `${brandName}待定商品 ${String(index + 1).padStart(2, "0")}`
-    );
-    const mealCuisineNames = [
-      "汉堡薯条",
-      "西餐",
-      "火锅",
-      "烧烤",
-      "烤肉（烤鱼）",
-      "日式料理",
-      "韩式料理",
-      "家常菜",
-      "粤菜",
-      "东北菜",
-      "自助餐（烤肉自助、火锅自助）",
-      "特色菜"
-    ];
-    const createMealProductNames = (cuisineName) => Array.from(
-      { length: 5 },
-      (_, index) => `${cuisineName}待定商品 ${String(index + 1).padStart(2, "0")}`
-    );
-    const entertainmentGameGroups = [
-      {
-        section: "电脑游戏陪玩",
-        modules: ["无畏契约", "三角洲行动", "斗地主", "steam游戏"]
-      },
-      {
-        section: "手机游戏陪玩",
-        modules: ["洛克王国（hot！）", "王者荣耀", "心动小镇", "金铲铲之战", "三角洲行动（手游版）"]
-      }
-    ];
-    const createEntertainmentProductNames = (moduleName) => Array.from(
-      { length: 5 },
-      (_, index) => `${moduleName}待定商品 ${String(index + 1).padStart(2, "0")}`
-    );
-
-    const categories = [
-      {
-        name: "休闲零食区",
-        products: snackProductNames
-      },
-      ...drinkBrandNames.map((brandName) => ({
-        name: `饮品区 / ${brandName}`,
-        products: createDrinkProductNames(brandName)
-      })),
-      ...mealCuisineNames.map((cuisineName) => ({
-        name: `正餐区 / ${cuisineName}`,
-        products: createMealProductNames(cuisineName)
-      })),
-      ...entertainmentGameGroups.flatMap((group) => group.modules.map((moduleName) => ({
-        name: `娱乐区 / ${group.section} / ${moduleName}`,
-        products: createEntertainmentProductNames(moduleName)
-      }))),
-      {
-        name: "学习区",
-        products: Array.from({ length: 20 }, (_, index) => `学习区待定商品 ${String(index + 1).padStart(2, "0")}`)
-      }
-    ];
-
     const form = document.querySelector("#checkoutForm");
     const success = document.querySelector("#success");
     const orderCode = document.querySelector("#orderCode");
-    const categorySelect = document.querySelector("#category");
-    const productSelect = document.querySelector("#product");
-    const quantityInput = document.querySelector("#quantity");
-    const specInput = document.querySelector("#spec");
-    const deliverySelect = document.querySelector("#delivery");
-    const prevButton = document.querySelector("#prevStep");
-    const nextButton = document.querySelector("#nextStep");
-    const stepPanels = [...document.querySelectorAll(".form-step")];
-    const stepLabels = [...document.querySelectorAll(".step")];
-    const summaryCategory = document.querySelector("#summaryCategory");
-    const summaryProduct = document.querySelector("#summaryProduct");
-    const summarySpec = document.querySelector("#summarySpec");
-    const summaryQuantity = document.querySelector("#summaryQuantity");
-    const summaryDelivery = document.querySelector("#summaryDelivery");
-    const summaryPayment = document.querySelector("#summaryPayment");
+    const cartReview = document.querySelector("#cartReview");
+    const summaryItems = document.querySelector("#summaryItems");
+    const summaryCount = document.querySelector("#summaryCount");
+    const summaryTotal = document.querySelector("#summaryTotal");
+    const addressInput = document.querySelector("#address");
+    const noteInput = document.querySelector("#note");
+    const submitButton = document.querySelector("#submitOrder");
 
-    let currentStep = 0;
-
-    function getPaymentValue() {
-      return new FormData(form).get("payment") || "提交后联系付款";
-    }
-
-    function renderCategories() {
-      categorySelect.innerHTML = categories.map((category, index) => `<option value="${index}">${category.name}</option>`).join("");
-    }
-
-    function renderProducts(selectedProductName) {
-      const category = categories[Number(categorySelect.value)];
-      productSelect.innerHTML = category.products.map((product) => `<option value="${product}">${product}</option>`).join("");
-      if (selectedProductName && category.products.includes(selectedProductName)) {
-        productSelect.value = selectedProductName;
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem("beeCart") || "[]");
+      } catch {
+        return [];
       }
     }
 
-    function updateSummary() {
-      summaryCategory.textContent = categories[Number(categorySelect.value)].name;
-      summaryProduct.textContent = productSelect.value;
-      summarySpec.textContent = specInput.value.trim() || "未填写";
-      summaryQuantity.textContent = quantityInput.value || "1";
-      summaryDelivery.textContent = deliverySelect.value;
-      summaryPayment.textContent = getPaymentValue();
+    function saveCart(cart) {
+      localStorage.setItem("beeCart", JSON.stringify(cart));
     }
 
-    function setStep(step) {
-      currentStep = step;
-      stepPanels.forEach((panel, index) => panel.classList.toggle("is-active", index === currentStep));
-      stepLabels.forEach((label, index) => label.classList.toggle("is-active", index === currentStep));
-      prevButton.style.visibility = currentStep === 0 ? "hidden" : "visible";
-      nextButton.textContent = currentStep === stepPanels.length - 1 ? "提交订单" : "下一步";
-      updateSummary();
+    function formatPrice(value) {
+      if (value === null || value === undefined || value === "") {
+        return "待定";
+      }
+      return `¥${Number(value || 0).toFixed(0)}`;
     }
 
-    function validateCurrentStep() {
-      const fields = [...stepPanels[currentStep].querySelectorAll("input, select, textarea")];
-      return fields.every((field) => field.reportValidity());
+    function getCartTotal(cart) {
+      if (!cart.length) return 0;
+      if (cart.some((item) => item.price === null || item.price === undefined || item.price === "")) {
+        return null;
+      }
+      return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function renderCartReview() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      summaryCount.textContent = `共 ${count} 件商品`;
+      summaryItems.innerHTML = cart.length
+        ? cart.map((item) => `
+            <li>
+              <span>${item.name} × ${item.quantity}</span>
+              <strong>${formatPrice(item.price === null || item.price === undefined || item.price === "" ? null : item.price * item.quantity)}</strong>
+            </li>
+          `).join("")
+        : `<li>购物车空了，请先返回商品页添加商品。</li>`;
+      const total = getCartTotal(cart);
+      summaryTotal.textContent = total === null ? "待定" : `¥${total}`;
+
+      cartReview.innerHTML = cart.length
+        ? cart.map((item) => `
+            <div class="cart-review-item">
+              <span>
+                <strong>${item.name}</strong><br>
+                <small>${item.category}</small>
+              </span>
+              <span>${item.quantity} 件</span>
+            </div>
+          `).join("")
+        : `<div class="cart-empty">
+              <strong>购物车还是空的</strong>
+              <p>先挑选商品加入购物车，再回到这里核对并提交。</p>
+              <a href="products.html" class="button secondary" style="margin-top: 12px;">去挑商品</a>
+            </div>`;
+
+      submitButton.disabled = cart.length === 0;
     }
 
     function getApiUrl(path) {
@@ -708,75 +592,74 @@
       return isStaticPreview ? `http://127.0.0.1:3000${path}` : path;
     }
 
-    async function submitOrder() {
-      const data = Object.fromEntries(new FormData(form).entries());
+    async function submitOrder(event) {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const cart = getCart();
+      if (!cart.length) return;
+
       const order = {
-        ...data,
-        category: categories[Number(categorySelect.value)].name,
-        product: productSelect.value,
-        spec: specInput.value.trim() || "未填写",
+        items: cart,
+        product: cart.map((item) => `${item.name} x${item.quantity}`).join("；"),
+        quantity: cart.reduce((sum, item) => sum + item.quantity, 0),
+        category: [...new Set(cart.map((item) => item.category))].join("；"),
+        address: addressInput.value.trim() || "未填写",
+        note: noteInput.value.trim() || "无",
         submittedAt: new Date().toISOString()
       };
 
-      nextButton.disabled = true;
-      nextButton.textContent = "提交中";
+      submitButton.disabled = true;
+      submitButton.textContent = "正在提交...";
 
-      const response = await fetch(getApiUrl("/api/orders"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order)
-      });
+      try {
+        const response = await fetch(getApiUrl("/api/orders"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(order)
+        });
 
-      if (!response.ok) {
-        throw new Error("订单提交失败");
-      }
-
-      const result = await response.json();
-      orderCode.textContent = result.orderCode ? `订单编号：${result.orderCode}` : "";
-      success.classList.add("is-open");
-      form.style.display = "none";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    categorySelect.addEventListener("change", () => {
-      renderProducts();
-      updateSummary();
-    });
-    form.addEventListener("input", updateSummary);
-    form.addEventListener("change", updateSummary);
-    prevButton.addEventListener("click", () => setStep(Math.max(0, currentStep - 1)));
-    nextButton.addEventListener("click", async () => {
-      if (!validateCurrentStep()) return;
-      if (currentStep === stepPanels.length - 1) {
-        try {
-          await submitOrder();
-        } catch (error) {
-          console.error(error);
-          nextButton.disabled = false;
-          nextButton.textContent = "提交订单";
-          alert("提交失败，请稍后再试。");
+        if (!response.ok) {
+          throw new Error("订单提交失败");
         }
-        return;
+
+        const result = await response.json();
+        orderCode.textContent = result.orderCode ? `订单编号：${result.orderCode}` : "";
+        success.classList.add("is-open");
+        form.style.display = "none";
+        saveCart([]);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (error) {
+        console.error(error);
+        alert("提交失败，请稍后再试。");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "确认并提交";
       }
-      setStep(currentStep + 1);
-    });
-
-    renderCategories();
-
-    const query = new URLSearchParams(window.location.search);
-    const selectedProduct = query.get("product");
-    const selectedCategory = query.get("category");
-    const exactCategoryIndex = categories.findIndex((category) => (
-      category.name === selectedCategory && category.products.includes(selectedProduct)
-    ));
-    const selectedCategoryIndex = exactCategoryIndex >= 0
-      ? exactCategoryIndex
-      : categories.findIndex((category) => category.products.includes(selectedProduct));
-    if (selectedCategoryIndex >= 0) {
-      categorySelect.value = String(selectedCategoryIndex);
     }
-    renderProducts(selectedProduct);
-    setStep(0);
+
+    function ensureDirectOrderCart() {
+      const cart = getCart();
+      const query = new URLSearchParams(window.location.search);
+      const selectedCategory = query.get("category");
+      const selectedProduct = query.get("product");
+      if (!cart.length && selectedProduct) {
+        saveCart([
+          {
+            id: selectedProduct,
+            name: selectedProduct,
+            category: selectedCategory || "未分类",
+            price: null,
+            quantity: 1
+          }
+        ]);
+      }
+    }
+
+    form.addEventListener("submit", submitOrder);
+    window.addEventListener("DOMContentLoaded", () => {
+      ensureDirectOrderCart();
+      renderCartReview();
+    });
   </script>
 </body>
 </html>
