@@ -1,0 +1,6 @@
+2026.4.26
+已完成 GitHub Pages + Vercel 企业微信点单通知，仓库在 C:\Users\haoyu wang\Desktop\codex-test，线上前端
+  https://why-bee-0813.github.io/bee-shop/，后端 https://bee-shop.vercel.app。
+
+2026.5.5
+优化了结算界面交互；优化了商品页用户体验；更新了比奇堡夏日限定背景

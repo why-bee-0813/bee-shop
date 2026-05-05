@@ -3,5 +3,6 @@ data/
 server.*.log
 *.log
 .vercel/
+.vs/
 
 .vercel
